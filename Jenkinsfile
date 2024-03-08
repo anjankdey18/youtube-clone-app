@@ -57,7 +57,7 @@ pipeline {
         // }
         stage('Docker Build'){
             steps{
-                sh "docker build . -t anjandey18/youtube-clone:${DOCKER_TAG} "
+                sh "docker build . -t anjandey18/youtube-clone-app:${DOCKER_TAG} "
             }
         }
                         
@@ -66,12 +66,12 @@ pipeline {
                 withCredentials([string(credentialsId: 'docker-hub', variable: 'dockerHubPwd')]) {
                     sh "docker login -u anjandey18 -p ${dockerHubPwd}"
                 }
-                sh "docker push anjandey18/youtube-clone:${DOCKER_TAG} "
+                sh "docker push anjandey18/youtube-clone-app:${DOCKER_TAG} "
             }
         }
         stage("TRIVY Image Scan"){
             steps{
-                sh "trivy image anjandey18/youtube-clone:latest > trivyimage.txt" 
+                sh "trivy image anjandey18/youtube-clone-app:latest > trivyimage.txt" 
             }
         }
         stage('Docker Deploy'){

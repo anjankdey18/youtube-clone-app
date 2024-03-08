@@ -21,7 +21,7 @@
         state: present
     - name: Start the container
       docker_container:
-        name: mymvncontainer
+        name: youtube-clone-app-container
         image: "anjandey18/youtube-clone-app:{{DOCKER_TAG}}"
         state: started
         published_ports:
