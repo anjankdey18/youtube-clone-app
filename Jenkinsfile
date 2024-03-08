@@ -6,6 +6,7 @@ pipeline {
     }
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
+         DOCKER_TAG = getVersion()
     }
     stages {
         stage('clean workspace') {
@@ -59,6 +60,13 @@ pipeline {
                 sh "trivy image anjandey18/youtube-clone:latest > trivyimage.txt" 
             }
         }
+        stage('Docker Deploy'){
+            steps{
+                // ansiblePlaybook credentialsId: 'docker-server-access-dev', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${DOCKER_TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml', vaultTmpPath: ''
+                ansiblePlaybook credentialsId: 'docker-server-access-dev', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${DOCKER_TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml', vaultTmpPath: ''
+            }
+        }
+
         // stage('Deploy to Kubernets'){
         //     steps{
         //         script{
@@ -84,4 +92,9 @@ pipeline {
     //         attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
     //     }
     // }
+}
+
+def getVersion(){
+    def commitHash = sh lavel: '', returnStdout: true, script: 'git rev-parse --short HEAD'
+    return commitHash
 }
