@@ -44,15 +44,29 @@ pipeline {
                  sh "trivy fs . > trivyfs.txt"
              }
          }
-         stage("Docker Build & Push"){
-             steps{
-                 script{
-                  withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker'){   
-                      sh "docker build -t youtube-clone ."
-                      sh "docker tag youtube-clone anjandey18/youtube-clone:latest "
-                      sh "docker push anjandey18/youtube-clone:latest "
-                    }
+        //  stage("Docker Build & Push"){
+        //      steps{
+        //          script{
+        //           withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker'){   
+        //               sh "docker build -t youtube-clone ."
+        //               sh "docker tag youtube-clone anjandey18/youtube-clone:latest "
+        //               sh "docker push anjandey18/youtube-clone:latest "
+        //             }
+        //         }
+        //     }
+        // }
+        stage('Docker Build'){
+            steps{
+                sh "docker build . -t anjandey18/youtube-clone:${DOCKER_TAG} "
+            }
+        }
+                        
+        stage('DockerHub Push'){
+            steps{
+                withCredentials([string(credentialsId: 'docker-hub', variable: 'dockerHubPwd')]) {
+                    sh "docker login -u anjandey18 -p ${dockerHubPwd}"
                 }
+                sh "docker push anjandey18/youtube-clone:${DOCKER_TAG} "
             }
         }
         stage("TRIVY Image Scan"){
