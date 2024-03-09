@@ -2,4 +2,4 @@
 #172.31.34.192 ansible_user=ec2-user
 #192.168.200.13 ansible_user=ans
 18.207.47.218 ansible_user=ec2-user
-#100.25.139.189 ansible_user=ec2-user
+52.91.145.41 ansible_user=ubuntu

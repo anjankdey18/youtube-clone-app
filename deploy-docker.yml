@@ -26,4 +26,5 @@
         #image: "anjandey18/youtube-clone-app:{{DOCKER_TAG}}"
         state: started
         published_ports:
-          - 0.0.0.0:8080:8080
+        #  - 0.0.0.0:8080:8080
+          - 0.0.0.0:3000:3000

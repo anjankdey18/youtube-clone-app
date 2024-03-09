@@ -56,10 +56,35 @@ make sure docker autostart when jenkins reboot using sudo chkconfig docker on fo
 
 for docker push:
 
-create password with script
+1. Create credential for dockerhub in jenkins
+ Manage jenkins > Credential > Add > Jenkins
+It will pop up Add Credentials window
 
-for ansible playbook script for jenkins:
-git the playbook file name(for example: deploy-docker.yml) to generate pipeline syntax. click on pipeline systax -> snippet generator -> steps -> sample step and select ansiblePlaybook:Invoke an ansible playbook -> Ansible tool as ansible -> Playbook file path in workspace as deploy-docker.yml -> inventory file as dev.inv which is in the same location -> ssh connection credentials as copy the pem file attribute and click on add -> jenkins -> Domain as Global credentials -> kind as SSH Username with private key enter id (ie: docker-server-access-dev) same description -> username as ec2-user -> select private key and click on add and paste the content/attribute of pem file which used to access on the server then click add. Now select it on snippet as ec2-user(docker-server-access-dev) also make sure select Disable the host SSH key check then generate.
+Domain > Global credentials
+Kind > Secret text
+Secret > your docker hub password
+ID > docker-hub (any meaningful name can be use)
+Description > docker-hub (it is easy if you use ID and Description are same)
+
+Then click on add. docker-hub as dockerhub credential is created.
+
+create password with script
+to generate pipeline syntax. click on pipeline systax -> snippet generator -> 
+steps -> sample step and select "withCredentials: Bind credentials to variables"
+Bindings > Add > Select Secret text > 
+                   1. Variable > dockerHubPwd (it can be anything)
+                   2. Credential > select created cred for dockerhub as docker-hub or follow step 2a
+                        2a. Add > Jenkins
+It will pop up Add Credentials window
+
+Domain > Global credentials
+Kind > Secret text
+Secret > your docker hub password
+ID > docker-hub (any meaningful name can be use)
+Description > docker-hub (it is easy if you use ID and Description are same)
+
+Then click on add. docker-hub as dockerhub credential is created.
+
 
 
 for docker deploy: 
